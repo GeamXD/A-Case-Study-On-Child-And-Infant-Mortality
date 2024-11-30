@@ -1,2 +1,2 @@
-# A-Case-Study-On-Child-And-Infant-Mortality
- A report on a case study  of child and infant mortality
+# A-Case-Study-On-Tackling-Child-and-Infant-Mortality-in-Africa
+ A report on a case study on Tackling-Child-and-Infant-Mortality-in-Africa
