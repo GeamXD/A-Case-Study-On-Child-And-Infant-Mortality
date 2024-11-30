@@ -102,15 +102,28 @@ def wrangle_health_data(data_directory='data/'):
 
     # Drop columns that are not needed for the analysis
     drop_cols = ['IndicatorCode', 'Indicator', 'ValueType', 'ParentLocationCode',
-             'Location type', 'SpatialDimValueCode',
-             'Period type', 'Period', 'IsLatestYear', 'Dim1 type',
-             'Dim1ValueCode', 'Dim2 type', 'Dim2ValueCode', 'Language', 'DateModified',
-             'Entity_health', 'Entity_vacc', 'Entity_child', 'Entity_births', 'Entity_infant', 'Entity_youth', 'Location',]
-    merged_data.drop(columns=drop_cols, inplace=True)
+                 'Location type', 'SpatialDimValueCode',
+                 'Period type', 'Period', 'IsLatestYear', 'Dim1 type', 'Location',
+                 'Dim1ValueCode', 'Dim2 type', 'Dim2ValueCode', 'Language', 'DateModified']
+
+    # Only drop columns that exist in the DataFrame
+    cols_to_drop = [col for col in drop_cols if col in merged_data.columns]
+    merged_data.drop(columns=cols_to_drop, inplace=True)
+
+    # Remove 'Entity' columns dynamically
+    entity_cols = [col for col in merged_data.columns if col.startswith('Entity_')]
+    if entity_cols:
+        merged_data.drop(columns=entity_cols, inplace=True)
 
     # Truncate some column names for readability
-    rename_cols = ['Share of population covered by health insurance (ILO (2014))','Observation value - Indicator: Under-five mortality rate - Sex: Total - Wealth quintile: Total - Unit of measure: Deaths per 100 live births']
     merged_data.columns = merged_data.columns.str.replace('Share of population covered by health insurance (ILO (2014))', 'Health insurance coverage (ILO, 2014)')
     merged_data.columns = merged_data.columns.str.replace('Observation value - Indicator: Under-five mortality rate - Sex: Total - Wealth quintile: Total - Unit of measure: Deaths per 100 live births', 'Under-five mortality rate - Total - Deaths per 100 live births')
+
+    # Rename columns
+    merged_data.rename(columns={
+        'Dim2': 'Cause of death',
+        'ParentLocation': 'Region',
+        'Dim1': 'Age_in_Months_Days_Years'
+    }, inplace=True)
 
     return merged_data
