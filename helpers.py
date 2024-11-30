@@ -100,4 +100,17 @@ def wrangle_health_data(data_directory='data/'):
     print("\nMerge Statistics:")
     print(f"Final merged dataset: {len(merged_data)} rows")
 
+    # Drop columns that are not needed for the analysis
+    drop_cols = ['IndicatorCode', 'Indicator', 'ValueType', 'ParentLocationCode',
+             'Location type', 'SpatialDimValueCode',
+             'Period type', 'Period', 'IsLatestYear', 'Dim1 type',
+             'Dim1ValueCode', 'Dim2 type', 'Dim2ValueCode', 'Language', 'DateModified',
+             'Entity_health', 'Entity_vacc', 'Entity_child', 'Entity_births', 'Entity_infant', 'Entity_youth', 'Location',]
+    merged_data.drop(columns=drop_cols, inplace=True)
+
+    # Truncate some column names for readability
+    rename_cols = ['Share of population covered by health insurance (ILO (2014))','Observation value - Indicator: Under-five mortality rate - Sex: Total - Wealth quintile: Total - Unit of measure: Deaths per 100 live births']
+    merged_data.columns = merged_data.columns.str.replace('Share of population covered by health insurance (ILO (2014))', 'Health insurance coverage (ILO, 2014)')
+    merged_data.columns = merged_data.columns.str.replace('Observation value - Indicator: Under-five mortality rate - Sex: Total - Wealth quintile: Total - Unit of measure: Deaths per 100 live births', 'Under-five mortality rate - Total - Deaths per 100 live births')
+
     return merged_data
