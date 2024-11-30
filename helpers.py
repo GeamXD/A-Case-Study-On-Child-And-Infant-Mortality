@@ -91,8 +91,8 @@ def wrangle_health_data(data_directory='data/'):
     merged_data = pd.merge(
         merged_data,
         datasets['causes_of_death'],
-        left_on='Code',
-        right_on='SpatialDimValueCode',
+        left_on=['Code', 'Year'],
+        right_on=['SpatialDimValueCode', 'Period'],
         how='inner'
     )
 
